@@ -18,12 +18,11 @@
         
         .card { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; }
         
-        /* Language Toggle con espacio ajustado */
         .lang-toggle { 
             display: flex; 
             justify-content: flex-end; 
             gap: 5px; 
-            margin-bottom: 10px; /* Espacio reducido a petición */
+            margin-bottom: 10px;
         }
         .lang-btn { background: #e8e8ed; border: none; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: #6e6e73; transition: all 0.2s; }
         .lang-btn.active { background: var(--isopan-blue); color: white; }
@@ -80,7 +79,7 @@
         </div>
 
         <div id="partial-fields" style="display:none;">
-            <label id="lbl-m2">Metros Cuadrados (m2)</label>
+            <label id="lbl-m2">Metros Cuadrados (m²)</label>
             <input type="number" id="m2" placeholder="0.00" step="any" inputmode="decimal">
             
             <label id="lbl-fam">Familia de Panel</label>
@@ -109,23 +108,23 @@
     const translations = {
         es: {
             subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
-            btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m2)", lblFam: "Familia de Panel",
+            btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel",
             lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR PRESUPUESTO",
             detailFull: "Tarifa Camión Completo<br>Desde <b>Isopan {origin}</b> a <b>{prov}</b>",
-            detailPartial: "({price}€/m2 + 150€ Apertura camión)<br>Origen: Isopan {origin}",
+            detailPartial: "({price}€/m² + 150€ Apertura camión)<br>Origen: Isopan {origin}",
             shareTitle: "*ISOPAN - COTIZACIÓN LOGÍSTICA*", shareOrigin: "🛫 *Origen:*", shareDest: "🛬 *Destino:*",
             shareLoad: "🚛 *Carga:*", sharePanel: "📦 *Panel:*", shareQty: "📏 *Cant:*",
-            loadFull: "Completo", loadPartial: "Parcial", alertM2: "Ingresa m2 válidos"
+            loadFull: "Completo", loadPartial: "Parcial", alertM2: "Ingresa m² válidos"
         },
         it: {
             subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
-            btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m2)", lblFam: "Famiglia Pannello",
+            btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello",
             lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI PREVENTIVO",
             detailFull: "Tariffa Bilico Completo<br>Da <b>Isopan {origin}</b> a <b>{prov}</b>",
-            detailPartial: "({price}€/m2 + 150€ Apertura bilico)<br>Origine: Isopan {origin}",
+            detailPartial: "({price}€/m² + 150€ Apertura bilico)<br>Origine: Isopan {origin}",
             shareTitle: "*ISOPAN - PREVENTIVO LOGISTICA*", shareOrigin: "🛫 *Origine:*", shareDest: "🛬 *Destinazione:*",
             shareLoad: "🚛 *Carico:*", sharePanel: "📦 *Pannello:*", shareQty: "📏 *Quant:*",
-            loadFull: "Completo", loadPartial: "Parziale", alertM2: "Inserire m2 validi"
+            loadFull: "Completo", loadPartial: "Parziale", alertM2: "Inserire m² validi"
         }
     };
 
@@ -279,7 +278,10 @@
         let text = `${t.shareTitle}\n───────────────────\n`;
         text += `${t.shareOrigin} Isopan ${lastResult.origin}\n${t.shareDest} ${lastResult.province}\n`;
         text += `${t.shareLoad} ${lastResult.type === 'Full' ? t.loadFull : t.loadPartial}\n`;
-        if (lastResult.type === 'Partial') text += `${t.sharePanel} ${lastResult.family}\n${t.shareQty} ${lastResult.thick}mm / ${lastResult.m2}m2\n`;
+        if (lastResult.type === 'Partial') {
+            text += `${t.sharePanel} ${lastResult.family}\n`;
+            text += `${t.shareQty.replace('{thick}', lastResult.thick).replace('{m2}', lastResult.m2)}\n`;
+        }
         text += `───────────────────\n*TOTAL: ${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
         if (navigator.share) await navigator.share({ title: 'Presupuesto Isopan', text: text });
         else { navigator.clipboard.writeText(text); alert("Copiado / Copiato"); }
