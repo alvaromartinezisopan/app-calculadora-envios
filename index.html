@@ -9,8 +9,6 @@
     <link rel="apple-touch-icon" href="logo.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Isopan">
-    <link rel="icon" sizes="192x192" href="logo.png">
-    <link rel="icon" sizes="512x512" href="logo.png">
     <meta name="theme-color" content="#007397">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -20,9 +18,9 @@
             --isopan-blue: #007397; 
             --text: #1d1d1f; 
             --card-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+            --error-red: rgba(255, 59, 48, 0.8);
         }
         
-        /* Fondo degradado para que el efecto cristal luzca */
         body { 
             font-family: 'Inter', sans-serif; 
             background: linear-gradient(135deg, #f5f5f7 0%, #e2e2e7 100%); 
@@ -48,49 +46,55 @@
         .subtitle { font-size: 13px; color: #86868b; margin: 0 0 20px 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         
         label { display: block; font-size: 11px; color: #6e6e73; margin: 15px 0 6px 5px; font-weight: 800; text-transform: uppercase; }
-        select, input { width: 100%; padding: 16px; border-radius: 14px; border: 2px solid #efeff4; font-size: 16px; font-weight: 700; outline: none; box-sizing: border-box; background: #f9f9fb; transition: all 0.2s ease; appearance: none; color: var(--text); }
+        select, input { width: 100%; padding: 16px; border-radius: 14px; border: 2px solid #efeff4; font-size: 16px; font-weight: 700; outline: none; box-sizing: border-box; background: #f9f9fb; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); appearance: none; color: var(--text); }
         select:focus, input:focus { border-color: var(--isopan-blue); background: white; }
         
-        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        /* --- ESTILO LIQUID GLASS ROJO PARA ERROR --- */
+        .input-error { 
+            background: var(--error-red) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(255, 59, 48, 0.3);
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        .input-error::placeholder { color: rgba(255,255,255,0.7); }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
         
+        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .truck-selector { display: flex; background: #efeff4; border-radius: 14px; padding: 4px; margin: 20px 0; }
         .truck-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 800; background: transparent; color: #6e6e73; transition: all 0.2s ease; }
         .truck-btn.active { background: white; color: var(--isopan-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        /* --- BOTÓN LIQUID GLASS --- */
+        /* --- BOTÓN CALCULAR LIQUID GLASS --- */
         .calc-btn { 
-            width: 100%; 
-            padding: 20px; 
-            background: rgba(0, 115, 151, 0.8); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: white; 
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px; 
-            font-size: 16px; 
-            font-weight: 900; 
-            cursor: pointer; 
-            margin-top: 10px; 
-            transition: all 0.3s; 
-            box-shadow: 0 8px 32px 0 rgba(0, 115, 151, 0.3);
+            width: 100%; padding: 20px; 
+            background: rgba(0, 115, 151, 0.85); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: white; border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px; font-size: 16px; font-weight: 900; cursor: pointer; 
+            margin-top: 10px; transition: all 0.3s; 
+            box-shadow: 0 8px 32px 0 rgba(0, 115, 151, 0.25);
         }
-        .calc-btn:hover:not(:disabled) { background: rgba(0, 115, 151, 0.9); box-shadow: 0 8px 32px 0 rgba(0, 115, 151, 0.5); }
-        .calc-btn:disabled { background: #d2d2d7; cursor: not-allowed; opacity: 0.6; }
         .calc-btn:active:not(:disabled) { transform: scale(0.97); }
+        .calc-btn:disabled { background: #d2d2d7; cursor: not-allowed; opacity: 0.6; box-shadow: none; }
 
         /* --- TARJETA RESULTADO LIQUID GLASS --- */
         .result-card { 
-            background: rgba(28, 28, 30, 0.85); 
+            background: rgba(28, 28, 30, 0.88); 
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            color: white; 
-            padding: 30px; 
-            border-radius: 32px; 
-            text-align: center; 
-            display: none; 
-            margin-top: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+            color: white; padding: 30px; border-radius: 32px; text-align: center; 
+            display: none; margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25); 
             animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); 
         }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -136,7 +140,7 @@
 
             <div id="partial-fields" style="display:none;">
                 <label id="lbl-m2">Metros Cuadrados (m²)</label>
-                <input type="number" id="m2" placeholder="0.00" oninput="resetUI()" inputmode="decimal">
+                <input type="number" id="m2" placeholder="0.00" oninput="removeError()" inputmode="decimal">
                 
                 <label id="lbl-fam">Familia de Panel</label>
                 <select id="family" onchange="updateThickness(); resetUI();"></select>
@@ -163,40 +167,19 @@
         let mode = 'full';
         let lastResult = null;
 
+        function removeError() {
+            document.getElementById('m2').classList.remove('input-error');
+            resetUI();
+        }
+
         const translations = {
-            es: {
-                subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
-                btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel",
-                lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR",
-                loading: "Cargando tarifas...", alertM2: "Ingresa m² válidos",
-                shareTitle: "🏢 COTIZACIÓN LOGÍSTICA ISOPAN", shareTotal: "💰 TOTAL NETO ESTIMADO"
-            },
-            it: {
-                subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
-                btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello",
-                lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI",
-                loading: "Caricamento tariffe...", alertM2: "Inserire m² validi",
-                shareTitle: "🏢 PREVENTIVO LOGISTICA ISOPAN", shareTotal: "💰 TOTALE NETTO STIMATO"
-            }
+            es: { subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region", btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel", lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR", loading: "Cargando tarifas...", alertM2: "Ingresa m² válidos", shareTitle: "🏢 COTIZACIÓN LOGÍSTICA ISOPAN", shareTotal: "💰 TOTAL NETO ESTIMADO" },
+            it: { subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione", btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello", lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI", loading: "Caricamento tariffe...", alertM2: "Inserire m² validi", shareTitle: "🏢 PREVENTIVO LOGISTICA ISOPAN", shareTotal: "💰 TOTALE NETTO STIMATO" }
         };
 
-        const GIDS = {
-            'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' },
-            'Pozzolo': { 'Francia': '1123279553' }
-        };
-
-        const MAP_ES = {
-            isobox: { name: 'ISOBOX/ISOPARETE/FARMAFARM', start: 4, sizes: [30, 35, 40, 50, 60, 80, 100, 120] },
-            isofrozen: { name: 'ISOFROZEN/WALL/WALL PLISSE', start: 13, sizes: [80, 100, 120, 150, 200] },
-            isocop: { name: 'ISOCOP/ISOTAP/ISOTEGO/ISOFIRE ROOF', start: 19, sizes: [30, 40, 50, 60, 80, 100, 120, 150, 200] }
-        };
-
-        const MAP_IT = {
-            parete_pir: { name: 'PARETE PIR-PUR', start: 4, sizes: [25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 180, 200] },
-            copertura_pir: { name: 'COPERTURA PIR-PUR', start: 17, sizes: [15, 30, 40, 50, 60, 80, 100, 120] },
-            parete_mw: { name: 'PARETE MW', start: 26, sizes: [50, 60, 80, 100, 120, 150, 170, 200] },
-            copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }
-        };
+        const GIDS = { 'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' }, 'Pozzolo': { 'Francia': '1123279553' } };
+        const MAP_ES = { isobox: { name: 'ISOBOX/ISOPARETE/FARMAFARM', start: 4, sizes: [30, 35, 40, 50, 60, 80, 100, 120] }, isofrozen: { name: 'ISOFROZEN/WALL/WALL PLISSE', start: 13, sizes: [80, 100, 120, 150, 200] }, isocop: { name: 'ISOCOP/ISOTAP/ISOTEGO/ISOFIRE ROOF', start: 19, sizes: [30, 40, 50, 60, 80, 100, 120, 150, 200] } };
+        const MAP_IT = { parete_pir: { name: 'PARETE PIR-PUR', start: 4, sizes: [25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 180, 200] }, copertura_pir: { name: 'COPERTURA PIR-PUR', start: 17, sizes: [15, 30, 40, 50, 60, 80, 100, 120] }, parete_mw: { name: 'PARETE MW', start: 26, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }, copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] } };
 
         function resetUI() { document.getElementById('result').style.display = 'none'; }
 
@@ -224,19 +207,10 @@
             const origin = document.getElementById('origin').value;
             const countrySelect = document.getElementById('country');
             countrySelect.innerHTML = '';
-            Object.keys(GIDS[origin]).forEach(c => {
-                let opt = document.createElement('option');
-                opt.value = c; opt.text = c;
-                countrySelect.appendChild(opt);
-            });
-            const famSelect = document.getElementById('family');
-            famSelect.innerHTML = '';
+            Object.keys(GIDS[origin]).forEach(c => { let opt = document.createElement('option'); opt.value = c; opt.text = c; countrySelect.appendChild(opt); });
+            const famSelect = document.getElementById('family'); famSelect.innerHTML = '';
             const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-            Object.keys(activeMap).forEach(k => {
-                let opt = document.createElement('option');
-                opt.value = k; opt.text = activeMap[k].name;
-                famSelect.appendChild(opt);
-            });
+            Object.keys(activeMap).forEach(k => { let opt = document.createElement('option'); opt.value = k; opt.text = activeMap[k].name; famSelect.appendChild(opt); });
             loadData();
         }
 
@@ -245,8 +219,7 @@
             const country = document.getElementById('country').value;
             const btn = document.getElementById('main-calc-btn');
             if(!country) return;
-            btn.disabled = true;
-            btn.innerText = translations[currentLang].loading;
+            btn.disabled = true; btn.innerText = translations[currentLang].loading;
             resetUI();
             const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[origin][country]}`;
             try {
@@ -254,33 +227,19 @@
                 const text = await res.text();
                 const rows = text.split('\n').map(line => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
                 currentData = rows.filter(r => r.length > 5 && r[1] && r[1].trim() !== "" && !r[1].includes("PROVINCIA"));
-                const sel = document.getElementById('province');
-                sel.innerHTML = '';
-                currentData.forEach(r => {
-                    let pName = r[1].replace(/"/g, '').trim();
-                    let opt = document.createElement('option');
-                    opt.value = pName; opt.text = pName;
-                    sel.appendChild(opt);
-                });
+                const sel = document.getElementById('province'); sel.innerHTML = '';
+                currentData.forEach(r => { let pName = r[1].replace(/"/g, '').trim(); let opt = document.createElement('option'); opt.value = pName; opt.text = pName; sel.appendChild(opt); });
                 updateThickness();
             } catch (e) { console.error(e); }
-            btn.disabled = false;
-            btn.innerText = translations[currentLang].btnCalc;
+            btn.disabled = false; btn.innerText = translations[currentLang].btnCalc;
         }
 
         function updateThickness() {
             const origin = document.getElementById('origin').value;
             const family = document.getElementById('family').value;
             const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-            const sel = document.getElementById('thickness');
-            sel.innerHTML = '';
-            if(activeMap[family]) {
-                activeMap[family].sizes.forEach(s => {
-                    let opt = document.createElement('option');
-                    opt.value = s; opt.text = s + ' mm';
-                    sel.appendChild(opt);
-                });
-            }
+            const sel = document.getElementById('thickness'); sel.innerHTML = '';
+            if(activeMap[family]) { activeMap[family].sizes.forEach(s => { let opt = document.createElement('option'); opt.value = s; opt.text = s + ' mm'; sel.appendChild(opt); }); }
         }
 
         function setMode(m) {
@@ -288,7 +247,7 @@
             document.getElementById('btn-full').classList.toggle('active', m === 'full');
             document.getElementById('btn-partial').classList.toggle('active', m === 'partial');
             document.getElementById('partial-fields').style.display = m === 'partial' ? 'block' : 'none';
-            resetUI();
+            removeError();
         }
 
         function cleanVal(val) {
@@ -307,14 +266,22 @@
             let total = 0;
             let detailText = "";
             const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-            const t = translations[currentLang];
+            
             if (mode === 'full') {
                 total = cleanVal(row[2]);
                 detailText = currentLang === 'es' ? `Tarifa Camión Completo<br>Desde <b>Isopan ${origin}</b> a <b>${provName}</b>` : `Tariffa Bilico Completo<br>Da <b>Isopan ${origin}</b> a <b>${provName}</b>`;
                 lastResult = { origin, type: mode, province: provName, total };
             } else {
-                const m2 = parseFloat(document.getElementById('m2').value) || 0;
-                if (m2 <= 0) { alert(t.alertM2); return; }
+                const m2Input = document.getElementById('m2');
+                const m2 = parseFloat(m2Input.value) || 0;
+                
+                // --- VALIDACIÓN CON RESALTO ROJO ---
+                if (m2 <= 0) { 
+                    m2Input.classList.add('input-error');
+                    m2Input.focus();
+                    return; 
+                }
+                
                 const family = document.getElementById('family').value;
                 const thick = document.getElementById('thickness').value;
                 const colIndex = activeMap[family].start + activeMap[family].sizes.indexOf(parseInt(thick));
@@ -333,8 +300,7 @@
             if (!lastResult) return;
             const t = translations[currentLang];
             const isEs = currentLang === 'es';
-            let text = `● ${t.shareTitle} ●\n`;
-            text += `──────────────────\n\n`;
+            let text = `● ${t.shareTitle} ●\n──────────────────\n\n`;
             text += `${isEs ? '📍 Origen: Isopan ' : '📍 Origine: Isopan '}${lastResult.origin}\n`;
             text += `${isEs ? '🏁 Destino: ' : '🏁 Destinazione: '}${lastResult.province}\n\n`;
             text += `${isEs ? '🚛 Tipo de Carga: ' : '🚛 Tipo di Carico: '}${lastResult.type === 'full' ? (isEs ? 'Camión Completo' : 'Bilico Completo') : (isEs ? 'Carga Parcial' : 'Carico Parziale')}\n`;
@@ -342,11 +308,9 @@
                 text += `${isEs ? '📦 Panel: ' : '📦 Pannello: '}${lastResult.family}\n`;
                 text += `${isEs ? '📏 Detalles: ' : '📏 Dettagli: '}${lastResult.thick}mm / ${lastResult.m2}m²\n`;
             }
-            text += `\n──────────────────\n`;
-            text += `${t.shareTotal}\n`;
-            text += `>> *${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
+            text += `\n──────────────────\n${t.shareTotal}\n>> *${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
             if (navigator.share) await navigator.share({ title: 'Isopan', text: text });
-            else { navigator.clipboard.writeText(text); alert("Copiado al portapapeles / Copiato negli appunti"); }
+            else { navigator.clipboard.writeText(text); alert("Copiado"); }
         }
         window.onload = handleOriginChange;
     </script>
