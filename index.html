@@ -7,6 +7,10 @@
     
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Isopan">
+    <link rel="icon" sizes="192x192" href="logo.png">
+    <link rel="icon" sizes="512x512" href="logo.png">
     <meta name="theme-color" content="#007397">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -54,253 +58,253 @@
 </head>
 <body>
 
-<div class="app-container">
-    <h1>Isopan Ibérica</h1>
-    <div class="subtitle" id="status-bar">Tarifas Corporativas</div>
-    
-    <div class="card">
-        <div class="lang-toggle">
-            <button class="lang-btn active" id="lang-es" onclick="changeLang('es')">ES</button>
-            <button class="lang-btn" id="lang-it" onclick="changeLang('it')">IT</button>
-        </div>
-
-        <div class="route-grid">
-            <div>
-                <label id="lbl-origin">Origen</label>
-                <select id="origin" onchange="handleOriginChange()">
-                    <option value="Ibérica">Isopan Ibérica</option>
-                    <option value="Pozzolo">Isopan Pozzolo</option>
-                </select>
+    <div class="app-container">
+        <h1>Isopan Ibérica</h1>
+        <div class="subtitle" id="status-bar">Tarifas Corporativas</div>
+        
+        <div class="card">
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="lang-es" onclick="changeLang('es')">ES</button>
+                <button class="lang-btn" id="lang-it" onclick="changeLang('it')">IT</button>
             </div>
-            <div>
-                <label id="lbl-dest">Destino</label>
-                <select id="country" onchange="loadData()"></select>
+
+            <div class="route-grid">
+                <div>
+                    <label id="lbl-origin">Origen</label>
+                    <select id="origin" onchange="handleOriginChange()">
+                        <option value="Ibérica">Isopan Ibérica</option>
+                        <option value="Pozzolo">Isopan Pozzolo</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="lbl-dest">Destino</label>
+                    <select id="country" onchange="loadData()"></select>
+                </div>
             </div>
+
+            <label id="lbl-prov">Provincia / Region</label>
+            <select id="province" onchange="resetUI()"></select>
+
+            <div class="truck-selector">
+                <button class="truck-btn active" id="btn-full" onclick="setMode('full')">C. Completo</button>
+                <button class="truck-btn" id="btn-partial" onclick="setMode('partial')">C. Parcial</button>
+            </div>
+
+            <div id="partial-fields" style="display:none;">
+                <label id="lbl-m2">Metros Cuadrados (m²)</label>
+                <input type="number" id="m2" placeholder="0.00" oninput="resetUI()" inputmode="decimal">
+                
+                <label id="lbl-fam">Familia de Panel</label>
+                <select id="family" onchange="updateThickness(); resetUI();"></select>
+                
+                <label id="lbl-thick">Espesor</label>
+                <select id="thickness" onchange="resetUI()"></select>
+            </div>
+
+            <button class="calc-btn" id="main-calc-btn" onclick="calculate()">CALCULAR PRECIO</button>
         </div>
 
-        <label id="lbl-prov">Provincia / Region</label>
-        <select id="province" onchange="resetUI()"></select>
-
-        <div class="truck-selector">
-            <button class="truck-btn active" id="btn-full" onclick="setMode('full')">C. Completo</button>
-            <button class="truck-btn" id="btn-partial" onclick="setMode('partial')">C. Parcial</button>
+        <div class="result-card" id="result">
+            <div id="lbl-total-net" style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
+            <div class="price" id="res-total">0,00 €</div>
+            <div id="res-detail"></div>
+            <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR</button>
         </div>
-
-        <div id="partial-fields" style="display:none;">
-            <label id="lbl-m2">Metros Cuadrados (m²)</label>
-            <input type="number" id="m2" placeholder="0.00" oninput="resetUI()" inputmode="decimal">
-            
-            <label id="lbl-fam">Familia de Panel</label>
-            <select id="family" onchange="updateThickness(); resetUI();"></select>
-            
-            <label id="lbl-thick">Espesor</label>
-            <select id="thickness" onchange="resetUI()"></select>
-        </div>
-
-        <button class="calc-btn" id="main-calc-btn" onclick="calculate()">CALCULAR PRECIO</button>
     </div>
 
-    <div class="result-card" id="result">
-        <div id="lbl-total-net" style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
-        <div class="price" id="res-total">0,00 €</div>
-        <div id="res-detail"></div>
-        <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR WHATSAPP</button>
-    </div>
-</div>
+    <script>
+        const SHEET_ID = '2PACX-1vRLWmNKL74-jgHbM0NIT79W7ShCxYfIKCvkK9bXbBJA0-NcRmBn6hg4RZxLLeaNLyYqnXwTlvLJLx7y';
+        let currentLang = 'es';
+        let currentData = [];
+        let mode = 'full';
+        let lastResult = null;
 
-<script>
-    const SHEET_ID = '2PACX-1vRLWmNKL74-jgHbM0NIT79W7ShCxYfIKCvkK9bXbBJA0-NcRmBn6hg4RZxLLeaNLyYqnXwTlvLJLx7y';
-    let currentLang = 'es';
-    let currentData = [];
-    let mode = 'full';
-    let lastResult = null;
+        const translations = {
+            es: {
+                subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
+                btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel",
+                lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR",
+                loading: "Cargando tarifas...", alertM2: "Ingresa m² válidos",
+                shareTitle: "🏢 COTIZACIÓN LOGÍSTICA ISOPAN", shareTotal: "💰 TOTAL NETO ESTIMADO"
+            },
+            it: {
+                subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
+                btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello",
+                lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI",
+                loading: "Caricamento tariffe...", alertM2: "Inserire m² validi",
+                shareTitle: "🏢 PREVENTIVO LOGISTICA ISOPAN", shareTotal: "💰 TOTALE NETTO STIMATO"
+            }
+        };
 
-    const translations = {
-        es: {
-            subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
-            btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel",
-            lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR",
-            loading: "Cargando tarifas...", alertM2: "Ingresa m² válidos",
-            shareTitle: "🏢 COTIZACIÓN LOGÍSTICA ISOPAN", shareTotal: "💰 TOTAL NETO ESTIMADO"
-        },
-        it: {
-            subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
-            btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello",
-            lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI",
-            loading: "Caricamento tariffe...", alertM2: "Inserire m² validi",
-            shareTitle: "🏢 PREVENTIVO LOGISTICA ISOPAN", shareTotal: "💰 TOTALE NETTO STIMATO"
+        const GIDS = {
+            'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' },
+            'Pozzolo': { 'Francia': '1123279553' }
+        };
+
+        const MAP_ES = {
+            isobox: { name: 'ISOBOX/ISOPARETE/FARMAFARM', start: 4, sizes: [30, 35, 40, 50, 60, 80, 100, 120] },
+            isofrozen: { name: 'ISOFROZEN/WALL/WALL PLISSE', start: 13, sizes: [80, 100, 120, 150, 200] },
+            isocop: { name: 'ISOCOP/ISOTAP/ISOTEGO/ISOFIRE ROOF', start: 19, sizes: [30, 40, 50, 60, 80, 100, 120, 150, 200] }
+        };
+
+        const MAP_IT = {
+            parete_pir: { name: 'PARETE PIR-PUR', start: 4, sizes: [25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 180, 200] },
+            copertura_pir: { name: 'COPERTURA PIR-PUR', start: 17, sizes: [15, 30, 40, 50, 60, 80, 100, 120] },
+            parete_mw: { name: 'PARETE MW', start: 26, sizes: [50, 60, 80, 100, 120, 150, 170, 200] },
+            copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }
+        };
+
+        function resetUI() { document.getElementById('result').style.display = 'none'; }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            document.getElementById('lang-es').classList.toggle('active', lang === 'es');
+            document.getElementById('lang-it').classList.toggle('active', lang === 'it');
+            const t = translations[lang];
+            document.getElementById('status-bar').innerText = t.subtitle;
+            document.getElementById('lbl-origin').innerText = t.lblOrigin;
+            document.getElementById('lbl-dest').innerText = t.lblDest;
+            document.getElementById('lbl-prov').innerText = t.lblProv;
+            document.getElementById('btn-full').innerText = t.btnFull;
+            document.getElementById('btn-partial').innerText = t.btnPartial;
+            document.getElementById('lbl-m2').innerText = t.lblM2;
+            document.getElementById('lbl-fam').innerText = t.lblFam;
+            document.getElementById('lbl-thick').innerText = t.lblThick;
+            document.getElementById('main-calc-btn').innerText = t.btnCalc;
+            document.getElementById('lbl-total-net').innerText = t.lblTotalNet;
+            document.getElementById('lbl-share').innerText = t.btnShare;
+            resetUI();
         }
-    };
 
-    const GIDS = {
-        'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' },
-        'Pozzolo': { 'Francia': '1123279553' }
-    };
-
-    const MAP_ES = {
-        isobox: { name: 'ISOBOX/ISOPARETE/FARMAFARM', start: 4, sizes: [30, 35, 40, 50, 60, 80, 100, 120] },
-        isofrozen: { name: 'ISOFROZEN/WALL/WALL PLISSE', start: 13, sizes: [80, 100, 120, 150, 200] },
-        isocop: { name: 'ISOCOP/ISOTAP/ISOTEGO/ISOFIRE ROOF', start: 19, sizes: [30, 40, 50, 60, 80, 100, 120, 150, 200] }
-    };
-
-    const MAP_IT = {
-        parete_pir: { name: 'PARETE PIR-PUR', start: 4, sizes: [25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 180, 200] },
-        copertura_pir: { name: 'COPERTURA PIR-PUR', start: 17, sizes: [15, 30, 40, 50, 60, 80, 100, 120] },
-        parete_mw: { name: 'PARETE MW', start: 26, sizes: [50, 60, 80, 100, 120, 150, 170, 200] },
-        copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }
-    };
-
-    function resetUI() { document.getElementById('result').style.display = 'none'; }
-
-    function changeLang(lang) {
-        currentLang = lang;
-        document.getElementById('lang-es').classList.toggle('active', lang === 'es');
-        document.getElementById('lang-it').classList.toggle('active', lang === 'it');
-        const t = translations[lang];
-        document.getElementById('status-bar').innerText = t.subtitle;
-        document.getElementById('lbl-origin').innerText = t.lblOrigin;
-        document.getElementById('lbl-dest').innerText = t.lblDest;
-        document.getElementById('lbl-prov').innerText = t.lblProv;
-        document.getElementById('btn-full').innerText = t.btnFull;
-        document.getElementById('btn-partial').innerText = t.btnPartial;
-        document.getElementById('lbl-m2').innerText = t.lblM2;
-        document.getElementById('lbl-fam').innerText = t.lblFam;
-        document.getElementById('lbl-thick').innerText = t.lblThick;
-        document.getElementById('main-calc-btn').innerText = t.btnCalc;
-        document.getElementById('lbl-total-net').innerText = t.lblTotalNet;
-        document.getElementById('lbl-share').innerText = t.btnShare;
-        resetUI();
-    }
-
-    function handleOriginChange() {
-        const origin = document.getElementById('origin').value;
-        const countrySelect = document.getElementById('country');
-        countrySelect.innerHTML = '';
-        Object.keys(GIDS[origin]).forEach(c => {
-            let opt = document.createElement('option');
-            opt.value = c; opt.text = c;
-            countrySelect.appendChild(opt);
-        });
-        const famSelect = document.getElementById('family');
-        famSelect.innerHTML = '';
-        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-        Object.keys(activeMap).forEach(k => {
-            let opt = document.createElement('option');
-            opt.value = k; opt.text = activeMap[k].name;
-            famSelect.appendChild(opt);
-        });
-        loadData();
-    }
-
-    async function loadData() {
-        const origin = document.getElementById('origin').value;
-        const country = document.getElementById('country').value;
-        const btn = document.getElementById('main-calc-btn');
-        if(!country) return;
-        btn.disabled = true;
-        btn.innerText = translations[currentLang].loading;
-        resetUI();
-        const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[origin][country]}`;
-        try {
-            const res = await fetch(url);
-            const text = await res.text();
-            const rows = text.split('\n').map(line => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
-            currentData = rows.filter(r => r.length > 5 && r[1] && r[1].trim() !== "" && !r[1].includes("PROVINCIA"));
-            const sel = document.getElementById('province');
-            sel.innerHTML = '';
-            currentData.forEach(r => {
-                let pName = r[1].replace(/"/g, '').trim();
+        function handleOriginChange() {
+            const origin = document.getElementById('origin').value;
+            const countrySelect = document.getElementById('country');
+            countrySelect.innerHTML = '';
+            Object.keys(GIDS[origin]).forEach(c => {
                 let opt = document.createElement('option');
-                opt.value = pName; opt.text = pName;
-                sel.appendChild(opt);
+                opt.value = c; opt.text = c;
+                countrySelect.appendChild(opt);
             });
-            updateThickness();
-        } catch (e) { console.error(e); }
-        btn.disabled = false;
-        btn.innerText = translations[currentLang].btnCalc;
-    }
-
-    function updateThickness() {
-        const origin = document.getElementById('origin').value;
-        const family = document.getElementById('family').value;
-        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-        const sel = document.getElementById('thickness');
-        sel.innerHTML = '';
-        if(activeMap[family]) {
-            activeMap[family].sizes.forEach(s => {
+            const famSelect = document.getElementById('family');
+            famSelect.innerHTML = '';
+            const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+            Object.keys(activeMap).forEach(k => {
                 let opt = document.createElement('option');
-                opt.value = s; opt.text = s + ' mm';
-                sel.appendChild(opt);
+                opt.value = k; opt.text = activeMap[k].name;
+                famSelect.appendChild(opt);
             });
+            loadData();
         }
-    }
 
-    function setMode(m) {
-        mode = m;
-        document.getElementById('btn-full').classList.toggle('active', m === 'full');
-        document.getElementById('btn-partial').classList.toggle('active', m === 'partial');
-        document.getElementById('partial-fields').style.display = m === 'partial' ? 'block' : 'none';
-        resetUI();
-    }
+        async function loadData() {
+            const origin = document.getElementById('origin').value;
+            const country = document.getElementById('country').value;
+            const btn = document.getElementById('main-calc-btn');
+            if(!country) return;
+            btn.disabled = true;
+            btn.innerText = translations[currentLang].loading;
+            resetUI();
+            const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[origin][country]}`;
+            try {
+                const res = await fetch(url);
+                const text = await res.text();
+                const rows = text.split('\n').map(line => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+                currentData = rows.filter(r => r.length > 5 && r[1] && r[1].trim() !== "" && !r[1].includes("PROVINCIA"));
+                const sel = document.getElementById('province');
+                sel.innerHTML = '';
+                currentData.forEach(r => {
+                    let pName = r[1].replace(/"/g, '').trim();
+                    let opt = document.createElement('option');
+                    opt.value = pName; opt.text = pName;
+                    sel.appendChild(opt);
+                });
+                updateThickness();
+            } catch (e) { console.error(e); }
+            btn.disabled = false;
+            btn.innerText = translations[currentLang].btnCalc;
+        }
 
-    function cleanVal(val) {
-        if (!val) return 0;
-        let s = val.toString().replace(/["€\s]/g, '');
-        if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
-        else if (s.includes(',')) s = s.replace(',', '.');
-        return parseFloat(s) || 0;
-    }
-
-    function calculate() {
-        const origin = document.getElementById('origin').value;
-        const provName = document.getElementById('province').value;
-        const row = currentData.find(r => r[1].replace(/"/g, '').trim() === provName);
-        if (!row) return;
-        let total = 0;
-        let detailText = "";
-        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
-        const t = translations[currentLang];
-        if (mode === 'full') {
-            total = cleanVal(row[2]);
-            detailText = currentLang === 'es' ? `Tarifa Camión Completo<br>Desde <b>Isopan ${origin}</b> a <b>${provName}</b>` : `Tariffa Bilico Completo<br>Da <b>Isopan ${origin}</b> a <b>${provName}</b>`;
-            lastResult = { origin, type: mode, province: provName, total };
-        } else {
-            const m2 = parseFloat(document.getElementById('m2').value) || 0;
-            if (m2 <= 0) { alert(t.alertM2); return; }
+        function updateThickness() {
+            const origin = document.getElementById('origin').value;
             const family = document.getElementById('family').value;
-            const thick = document.getElementById('thickness').value;
-            const colIndex = activeMap[family].start + activeMap[family].sizes.indexOf(parseInt(thick));
-            const precioM2 = cleanVal(row[colIndex]);
-            total = 150 + (m2 * precioM2);
-            detailText = currentLang === 'es' ? `(${precioM2.toFixed(2)}€/m² + 150€ Apertura camión)<br>Origen: Isopan ${origin}` : `(${precioM2.toFixed(2)}€/m² + 150€ Apertura bilico)<br>Origine: Isopan ${origin}`;
-            lastResult = { origin, type: mode, province: provName, m2, family: activeMap[family].name, thick, total };
+            const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+            const sel = document.getElementById('thickness');
+            sel.innerHTML = '';
+            if(activeMap[family]) {
+                activeMap[family].sizes.forEach(s => {
+                    let opt = document.createElement('option');
+                    opt.value = s; opt.text = s + ' mm';
+                    sel.appendChild(opt);
+                });
+            }
         }
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('res-total').innerText = total.toLocaleString('es-ES', {minimumFractionDigits: 2}) + ' €';
-        document.getElementById('res-detail').innerHTML = detailText;
-        setTimeout(() => { document.getElementById('result').scrollIntoView({ behavior: 'smooth' }); }, 100);
-    }
 
-    async function shareResult() {
-        if (!lastResult) return;
-        const t = translations[currentLang];
-        const isEs = currentLang === 'es';
-        let text = `● ${t.shareTitle} ●\n`;
-        text += `──────────────────\n\n`;
-        text += `${isEs ? '📍 Origen: Isopan ' : '📍 Origine: Isopan '}${lastResult.origin}\n`;
-        text += `${isEs ? '🏁 Destino: ' : '🏁 Destinazione: '}${lastResult.province}\n\n`;
-        text += `${isEs ? '🚛 Tipo de Carga: ' : '🚛 Tipo di Carico: '}${lastResult.type === 'full' ? (isEs ? 'Camión Completo' : 'Bilico Completo') : (isEs ? 'Carga Parcial' : 'Carico Parziale')}\n`;
-        if (lastResult.type === 'partial') {
-            text += `${isEs ? '📦 Panel: ' : '📦 Pannello: '}${lastResult.family}\n`;
-            text += `${isEs ? '📏 Detalles: ' : '📏 Dettagli: '}${lastResult.thick}mm / ${lastResult.m2}m²\n`;
+        function setMode(m) {
+            mode = m;
+            document.getElementById('btn-full').classList.toggle('active', m === 'full');
+            document.getElementById('btn-partial').classList.toggle('active', m === 'partial');
+            document.getElementById('partial-fields').style.display = m === 'partial' ? 'block' : 'none';
+            resetUI();
         }
-        text += `\n──────────────────\n`;
-        text += `${t.shareTotal}\n`;
-        text += `>> *${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
-        if (navigator.share) await navigator.share({ title: 'Isopan', text: text });
-        else { navigator.clipboard.writeText(text); alert("Copiado al portapapeles / Copiato negli appunti"); }
-    }
-    window.onload = handleOriginChange;
-</script>
+
+        function cleanVal(val) {
+            if (!val) return 0;
+            let s = val.toString().replace(/["€\s]/g, '');
+            if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+            else if (s.includes(',')) s = s.replace(',', '.');
+            return parseFloat(s) || 0;
+        }
+
+        function calculate() {
+            const origin = document.getElementById('origin').value;
+            const provName = document.getElementById('province').value;
+            const row = currentData.find(r => r[1].replace(/"/g, '').trim() === provName);
+            if (!row) return;
+            let total = 0;
+            let detailText = "";
+            const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+            const t = translations[currentLang];
+            if (mode === 'full') {
+                total = cleanVal(row[2]);
+                detailText = currentLang === 'es' ? `Tarifa Camión Completo<br>Desde <b>Isopan ${origin}</b> a <b>${provName}</b>` : `Tariffa Bilico Completo<br>Da <b>Isopan ${origin}</b> a <b>${provName}</b>`;
+                lastResult = { origin, type: mode, province: provName, total };
+            } else {
+                const m2 = parseFloat(document.getElementById('m2').value) || 0;
+                if (m2 <= 0) { alert(t.alertM2); return; }
+                const family = document.getElementById('family').value;
+                const thick = document.getElementById('thickness').value;
+                const colIndex = activeMap[family].start + activeMap[family].sizes.indexOf(parseInt(thick));
+                const precioM2 = cleanVal(row[colIndex]);
+                total = 150 + (m2 * precioM2);
+                detailText = currentLang === 'es' ? `(${precioM2.toFixed(2)}€/m² + 150€ Apertura camión)<br>Origen: Isopan ${origin}` : `(${precioM2.toFixed(2)}€/m² + 150€ Apertura bilico)<br>Origine: Isopan ${origin}`;
+                lastResult = { origin, type: mode, province: provName, m2, family: activeMap[family].name, thick, total };
+            }
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('res-total').innerText = total.toLocaleString('es-ES', {minimumFractionDigits: 2}) + ' €';
+            document.getElementById('res-detail').innerHTML = detailText;
+            setTimeout(() => { document.getElementById('result').scrollIntoView({ behavior: 'smooth' }); }, 100);
+        }
+
+        async function shareResult() {
+            if (!lastResult) return;
+            const t = translations[currentLang];
+            const isEs = currentLang === 'es';
+            let text = `● ${t.shareTitle} ●\n`;
+            text += `──────────────────\n\n`;
+            text += `${isEs ? '📍 Origen: Isopan ' : '📍 Origine: Isopan '}${lastResult.origin}\n`;
+            text += `${isEs ? '🏁 Destino: ' : '🏁 Destinazione: '}${lastResult.province}\n\n`;
+            text += `${isEs ? '🚛 Tipo de Carga: ' : '🚛 Tipo di Carico: '}${lastResult.type === 'full' ? (isEs ? 'Camión Completo' : 'Bilico Completo') : (isEs ? 'Carga Parcial' : 'Carico Parziale')}\n`;
+            if (lastResult.type === 'partial') {
+                text += `${isEs ? '📦 Panel: ' : '📦 Pannello: '}${lastResult.family}\n`;
+                text += `${isEs ? '📏 Detalles: ' : '📏 Dettagli: '}${lastResult.thick}mm / ${lastResult.m2}m²\n`;
+            }
+            text += `\n──────────────────\n`;
+            text += `${t.shareTotal}\n`;
+            text += `>> *${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
+            if (navigator.share) await navigator.share({ title: 'Isopan', text: text });
+            else { navigator.clipboard.writeText(text); alert("Copiado al portapapeles / Copiato negli appunti"); }
+        }
+        window.onload = handleOriginChange;
+    </script>
 </body>
 </html>
