@@ -18,20 +18,17 @@
             --card-shadow: 0 10px 40px rgba(0,0,0,0.08); 
         }
         body { font-family: 'Inter', sans-serif; background: var(--apple-bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; }
-        .app-container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease-out; text-align: center; }
+        .app-container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Estilo para el Logo */
-        .brand-logo { width: 140px; height: auto; margin: 10px auto 15px auto; display: block; }
-
-        .card { background: white; border-radius: 24px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; text-align: left; }
+        .card { background: white; border-radius: 24px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; }
         
         .lang-toggle { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; }
         .lang-btn { background: #e8e8ed; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; color: #6e6e73; transition: all 0.2s; }
         .lang-btn.active { background: var(--isopan-blue); color: white; }
 
-        h1 { font-size: 24px; margin: 0 0 5px 0; font-weight: 900; letter-spacing: -1px; color: var(--isopan-blue); text-align: center; }
-        .subtitle { font-size: 12px; color: #86868b; margin: 0 0 20px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        h1 { font-size: 26px; margin: 10px 0 5px 5px; font-weight: 900; letter-spacing: -1px; color: var(--isopan-blue); }
+        .subtitle { font-size: 13px; color: #86868b; margin: 0 0 20px 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         
         label { display: block; font-size: 11px; color: #6e6e73; margin: 15px 0 6px 5px; font-weight: 800; text-transform: uppercase; }
         select, input { width: 100%; padding: 16px; border-radius: 14px; border: 2px solid #efeff4; font-size: 16px; font-weight: 700; outline: none; box-sizing: border-box; background: #f9f9fb; transition: all 0.2s ease; appearance: none; color: var(--text); }
@@ -50,7 +47,7 @@
         .result-card { background: #1c1c1e; color: white; padding: 30px; border-radius: 28px; text-align: center; display: none; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .price { font-size: 44px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -1.5px; }
-        #res-detail { font-size: 14px; opacity: 0.8; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.5; text-align: center; }
+        #res-detail { font-size: 14px; opacity: 0.8; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.5; }
         
         .share-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; transition: background 0.2s; }
     </style>
@@ -58,8 +55,6 @@
 <body>
 
 <div class="app-container">
-    <img src="logo.png" alt="Isopan" class="brand-logo" onerror="this.style.display='none'">
-    
     <h1>Isopan Ibérica</h1>
     <div class="subtitle" id="status-bar">Tarifas Corporativas</div>
     
