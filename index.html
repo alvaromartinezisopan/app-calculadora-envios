@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Isopan Logistic - Multi-Origen</title>
+    <title>Isopan Logistic</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -16,38 +16,41 @@
         .app-container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
-        .card { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; }
+        .card { background: white; border-radius: 24px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; }
         
-        .lang-toggle { 
-            display: flex; 
-            justify-content: flex-end; 
-            gap: 5px; 
-            margin-bottom: 10px;
-        }
-        .lang-btn { background: #e8e8ed; border: none; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: #6e6e73; transition: all 0.2s; }
+        .lang-toggle { display: flex; justify-content: flex-end; gap: 5px; margin-bottom: 10px; }
+        .lang-btn { background: #e8e8ed; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; color: #6e6e73; transition: all 0.2s; }
         .lang-btn.active { background: var(--isopan-blue); color: white; }
 
-        h1 { font-size: 28px; margin: 0 0 5px 5px; font-weight: 900; letter-spacing: -1.2px; color: var(--isopan-blue); }
-        .subtitle { font-size: 13px; color: #86868b; margin: 0 0 25px 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        label { display: block; font-size: 12px; color: #333; margin: 15px 0 6px 5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; }
-        select, input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #e5e5e5; font-size: 15px; font-weight: 800; outline: none; box-sizing: border-box; background: #fff; transition: all 0.2s ease; appearance: none; color: var(--text); }
-        select:focus, input:focus { border-color: var(--isopan-blue); }
-        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .truck-selector { display: flex; background: #e8e8ed; border-radius: 12px; padding: 4px; margin: 15px 0; }
-        .truck-btn { flex: 1; padding: 12px; border: none; border-radius: 9px; cursor: pointer; font-weight: 800; background: transparent; color: #6e6e73; transition: all 0.2s ease; }
-        .truck-btn.active { background: white; color: var(--isopan-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .calc-btn { width: 100%; padding: 18px; background: var(--isopan-blue); color: white; border: none; border-radius: 15px; font-size: 17px; font-weight: 900; cursor: pointer; margin-top: 20px; transition: all 0.2s; letter-spacing: 0.5px; }
-        .result-card { background: #1c1c1e; color: white; padding: 30px; border-radius: 25px; text-align: center; display: none; margin-top: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .price { font-size: 48px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -2px; }
-        #res-detail { font-size: 14px; font-weight: 700; opacity: 0.9; margin-top: 10px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.6; }
-        .share-btn { background: var(--isopan-blue); color: white; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; }
+        h1 { font-size: 26px; margin: 10px 0 5px 5px; font-weight: 900; letter-spacing: -1px; color: var(--isopan-blue); }
+        .subtitle { font-size: 13px; color: #86868b; margin: 0 0 20px 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        
+        label { display: block; font-size: 11px; color: #6e6e73; margin: 15px 0 6px 5px; font-weight: 800; text-transform: uppercase; }
+        select, input { width: 100%; padding: 16px; border-radius: 14px; border: 2px solid #efeff4; font-size: 16px; font-weight: 700; outline: none; box-sizing: border-box; background: #f9f9fb; transition: all 0.2s ease; appearance: none; color: var(--text); }
+        select:focus, input:focus { border-color: var(--isopan-blue); background: white; }
+        
+        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .truck-selector { display: flex; background: #efeff4; border-radius: 14px; padding: 4px; margin: 20px 0; }
+        .truck-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 800; background: transparent; color: #6e6e73; transition: all 0.2s ease; }
+        .truck-btn.active { background: white; color: var(--isopan-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        .calc-btn { width: 100%; padding: 20px; background: var(--isopan-blue); color: white; border: none; border-radius: 18px; font-size: 16px; font-weight: 900; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
+        .calc-btn:disabled { background: #d2d2d7; cursor: not-allowed; transform: none; }
+        .calc-btn:active:not(:disabled) { transform: scale(0.98); }
+
+        .result-card { background: #1c1c1e; color: white; padding: 30px; border-radius: 28px; text-align: center; display: none; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .price { font-size: 44px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -1.5px; }
+        #res-detail { font-size: 14px; opacity: 0.8; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.5; }
+        
+        .share-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; transition: background 0.2s; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h1 id="main-title">Isopan Ibérica</h1>
+    <h1>Isopan Ibérica</h1>
     <div class="subtitle" id="status-bar">Tarifas Corporativas</div>
     
     <div class="card">
@@ -71,7 +74,7 @@
         </div>
 
         <label id="lbl-prov">Provincia / Region</label>
-        <select id="province"></select>
+        <select id="province" onchange="resetUI()"></select>
 
         <div class="truck-selector">
             <button class="truck-btn active" id="btn-full" onclick="setMode('full')">C. Completo</button>
@@ -80,51 +83,47 @@
 
         <div id="partial-fields" style="display:none;">
             <label id="lbl-m2">Metros Cuadrados (m²)</label>
-            <input type="number" id="m2" placeholder="0.00" step="any" inputmode="decimal">
+            <input type="number" id="m2" placeholder="0.00" oninput="resetUI()" inputmode="decimal">
             
             <label id="lbl-fam">Familia de Panel</label>
-            <select id="family" onchange="updateThickness()"></select>
+            <select id="family" onchange="updateThickness(); resetUI();"></select>
             
             <label id="lbl-thick">Espesor</label>
-            <select id="thickness"></select>
+            <select id="thickness" onchange="resetUI()"></select>
         </div>
 
         <button class="calc-btn" id="main-calc-btn" onclick="calculate()">CALCULAR PRECIO</button>
     </div>
 
     <div class="result-card" id="result">
-        <div id="lbl-total-net" style="font-size: 12px; font-weight: 800; letter-spacing: 1.5px; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
+        <div id="lbl-total-net" style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
         <div class="price" id="res-total">0,00 €</div>
         <div id="res-detail"></div>
-        <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR PRESUPUESTO</button>
+        <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR</button>
     </div>
 </div>
 
 <script>
     const SHEET_ID = '2PACX-1vRLWmNKL74-jgHbM0NIT79W7ShCxYfIKCvkK9bXbBJA0-NcRmBn6hg4RZxLLeaNLyYqnXwTlvLJLx7y';
-    
     let currentLang = 'es';
+    let currentData = [];
+    let mode = 'full';
+    let lastResult = null;
 
     const translations = {
         es: {
             subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
             btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m²)", lblFam: "Familia de Panel",
-            lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR PRESUPUESTO",
-            detailFull: "Tarifa Camión Completo<br>Desde <b>Isopan {origin}</b> a <b>{prov}</b>",
-            detailPartial: "({price}€/m² + 150€ Apertura camión)<br>Origen: Isopan {origin}",
-            shareTitle: "*ISOPAN - COTIZACIÓN LOGÍSTICA*", shareOrigin: "🛫 *Origen:*", shareDest: "🛬 *Destino:*",
-            shareLoad: "🚛 *Carga:*", sharePanel: "📦 *Panel:*", shareQty: "📏 *Cant:*",
-            loadFull: "Completo", loadPartial: "Parcial", alertM2: "Ingresa m² válidos"
+            lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR WHATSAPP",
+            loading: "Cargando tarifas...", alertM2: "Ingresa m² válidos",
+            shareTitle: "🏢 COTIZACIÓN LOGÍSTICA ISOPAN", shareTotal: "💰 TOTAL NETO ESTIMADO"
         },
         it: {
             subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
             btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m²)", lblFam: "Famiglia Pannello",
-            lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI PREVENTIVO",
-            detailFull: "Tariffa Bilico Completo<br>Da <b>Isopan {origin}</b> a <b>{prov}</b>",
-            detailPartial: "({price}€/m² + 150€ Apertura bilico)<br>Origine: Isopan {origin}",
-            shareTitle: "*ISOPAN - PREVENTIVO LOGISTICA*", shareOrigin: "🛫 *Origine:*", shareDest: "🛬 *Destinazione:*",
-            shareLoad: "🚛 *Carico:*", sharePanel: "📦 *Pannello:*", shareQty: "📏 *Quant:*",
-            loadFull: "Completo", loadPartial: "Parziale", alertM2: "Inserire m² validi"
+            lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI",
+            loading: "Caricamento tariffe...", alertM2: "Inserire m² validi",
+            shareTitle: "🏢 PREVENTIVO LOGISTICA ISOPAN", shareTotal: "💰 TOTALE NETTO STIMATO"
         }
     };
 
@@ -146,9 +145,9 @@
         copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }
     };
 
-    let currentData = [];
-    let mode = 'full';
-    let lastResult = null;
+    function resetUI() {
+        document.getElementById('result').style.display = 'none';
+    }
 
     function changeLang(lang) {
         currentLang = lang;
@@ -167,7 +166,7 @@
         document.getElementById('main-calc-btn').innerText = t.btnCalc;
         document.getElementById('lbl-total-net').innerText = t.lblTotalNet;
         document.getElementById('lbl-share').innerText = t.btnShare;
-        if (document.getElementById('result').style.display === 'block') calculate();
+        resetUI();
     }
 
     function handleOriginChange() {
@@ -193,13 +192,22 @@
     async function loadData() {
         const origin = document.getElementById('origin').value;
         const country = document.getElementById('country').value;
+        const btn = document.getElementById('main-calc-btn');
         if(!country) return;
+        
+        // Efecto de carga
+        btn.disabled = true;
+        btn.innerText = translations[currentLang].loading;
+        resetUI();
+
         const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[origin][country]}`;
+        
         try {
             const res = await fetch(url);
             const text = await res.text();
             const rows = text.split('\n').map(line => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
             currentData = rows.filter(r => r.length > 5 && r[1] && r[1].trim() !== "" && !r[1].includes("PROVINCIA"));
+            
             const sel = document.getElementById('province');
             sel.innerHTML = '';
             currentData.forEach(r => {
@@ -210,6 +218,9 @@
             });
             updateThickness();
         } catch (e) { console.error(e); }
+
+        btn.disabled = false;
+        btn.innerText = translations[currentLang].btnCalc;
     }
 
     function updateThickness() {
@@ -232,7 +243,7 @@
         document.getElementById('btn-full').classList.toggle('active', m === 'full');
         document.getElementById('btn-partial').classList.toggle('active', m === 'partial');
         document.getElementById('partial-fields').style.display = m === 'partial' ? 'block' : 'none';
-        document.getElementById('result').style.display = 'none';
+        resetUI();
     }
 
     function cleanVal(val) {
@@ -248,14 +259,16 @@
         const provName = document.getElementById('province').value;
         const row = currentData.find(r => r[1].replace(/"/g, '').trim() === provName);
         if (!row) return;
+
         let total = 0;
         let detailText = "";
         const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
         const t = translations[currentLang];
+
         if (mode === 'full') {
             total = cleanVal(row[2]);
-            detailText = t.detailFull.replace('{origin}', origin).replace('{prov}', provName);
-            lastResult = { origin, type: 'Full', province: provName, total };
+            detailText = currentLang === 'es' ? `Tarifa Camión Completo<br>Desde <b>Isopan ${origin}</b> a <b>${provName}</b>` : `Tariffa Bilico Completo<br>Da <b>Isopan ${origin}</b> a <b>${provName}</b>`;
+            lastResult = { origin, type: mode, province: provName, total };
         } else {
             const m2 = parseFloat(document.getElementById('m2').value) || 0;
             if (m2 <= 0) { alert(t.alertM2); return; }
@@ -264,27 +277,41 @@
             const colIndex = activeMap[family].start + activeMap[family].sizes.indexOf(parseInt(thick));
             const precioM2 = cleanVal(row[colIndex]);
             total = 150 + (m2 * precioM2);
-            detailText = t.detailPartial.replace('{price}', precioM2.toFixed(2)).replace('{origin}', origin);
-            lastResult = { origin, type: 'Partial', province: provName, m2, family: activeMap[family].name, thick, total };
+            detailText = currentLang === 'es' ? `(${precioM2.toFixed(2)}€/m² + 150€ Apertura camión)<br>Origen: Isopan ${origin}` : `(${precioM2.toFixed(2)}€/m² + 150€ Apertura bilico)<br>Origine: Isopan ${origin}`;
+            lastResult = { origin, type: mode, province: provName, m2, family: activeMap[family].name, thick, total };
         }
+
         document.getElementById('result').style.display = 'block';
         document.getElementById('res-total').innerText = total.toLocaleString('es-ES', {minimumFractionDigits: 2}) + ' €';
         document.getElementById('res-detail').innerHTML = detailText;
+        
+        setTimeout(() => {
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }, 100);
     }
 
     async function shareResult() {
         if (!lastResult) return;
         const t = translations[currentLang];
-        let text = `${t.shareTitle}\n───────────────────\n`;
-        text += `${t.shareOrigin} Isopan ${lastResult.origin}\n${t.shareDest} ${lastResult.province}\n`;
-        text += `${t.shareLoad} ${lastResult.type === 'Full' ? t.loadFull : t.loadPartial}\n`;
-        if (lastResult.type === 'Partial') {
-            text += `${t.sharePanel} ${lastResult.family}\n`;
-            text += `${t.shareQty.replace('{thick}', lastResult.thick).replace('{m2}', lastResult.m2)}\n`;
+        const isEs = currentLang === 'es';
+        
+        let text = `● ${t.shareTitle} ●\n`;
+        text += `──────────────────\n\n`;
+        text += `${isEs ? '📍 Origen: Isopan ' : '📍 Origine: Isopan '}${lastResult.origin}\n`;
+        text += `${isEs ? '🏁 Destino: ' : '🏁 Destinazione: '}${lastResult.province}\n\n`;
+        text += `${isEs ? '🚛 Tipo de Carga: ' : '🚛 Tipo di Carico: '}${lastResult.type === 'full' ? (isEs ? 'Camión Completo' : 'Bilico Completo') : (isEs ? 'Carga Parcial' : 'Carico Parziale')}\n`;
+        
+        if (lastResult.type === 'partial') {
+            text += `${isEs ? '📦 Panel: ' : '📦 Pannello: '}${lastResult.family}\n`;
+            text += `${isEs ? '📏 Detalles: ' : '📏 Dettagli: '}${lastResult.thick}mm / ${lastResult.m2}m²\n`;
         }
-        text += `───────────────────\n*TOTAL: ${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
-        if (navigator.share) await navigator.share({ title: 'Presupuesto Isopan', text: text });
-        else { navigator.clipboard.writeText(text); alert("Copiado / Copiato"); }
+        
+        text += `\n──────────────────\n`;
+        text += `${t.shareTotal}\n`;
+        text += `>> *${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
+        
+        if (navigator.share) await navigator.share({ title: 'Isopan', text: text });
+        else { navigator.clipboard.writeText(text); alert("Copiado al portapapeles / Copiato negli appunti"); }
     }
     window.onload = handleOriginChange;
 </script>
