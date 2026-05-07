@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Isopan Logistic - Multi-Origen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --apple-bg: #f5f5f7; 
+            --isopan-blue: #007397; 
+            --text: #1d1d1f; 
+            --card-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--apple-bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; }
+        .app-container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: white; border-radius: 20px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; position: relative; }
+        
+        /* Language Toggle con espacio ajustado */
+        .lang-toggle { 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 5px; 
+            margin-bottom: 10px; /* Espacio reducido a petición */
+        }
+        .lang-btn { background: #e8e8ed; border: none; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: #6e6e73; transition: all 0.2s; }
+        .lang-btn.active { background: var(--isopan-blue); color: white; }
+
+        h1 { font-size: 28px; margin: 0 0 5px 5px; font-weight: 900; letter-spacing: -1.2px; color: var(--isopan-blue); }
+        .subtitle { font-size: 13px; color: #86868b; margin: 0 0 25px 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        label { display: block; font-size: 12px; color: #333; margin: 15px 0 6px 5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; }
+        select, input { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #e5e5e5; font-size: 15px; font-weight: 800; outline: none; box-sizing: border-box; background: #fff; transition: all 0.2s ease; appearance: none; color: var(--text); }
+        select:focus, input:focus { border-color: var(--isopan-blue); }
+        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .truck-selector { display: flex; background: #e8e8ed; border-radius: 12px; padding: 4px; margin: 15px 0; }
+        .truck-btn { flex: 1; padding: 12px; border: none; border-radius: 9px; cursor: pointer; font-weight: 800; background: transparent; color: #6e6e73; transition: all 0.2s ease; }
+        .truck-btn.active { background: white; color: var(--isopan-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .calc-btn { width: 100%; padding: 18px; background: var(--isopan-blue); color: white; border: none; border-radius: 15px; font-size: 17px; font-weight: 900; cursor: pointer; margin-top: 20px; transition: all 0.2s; letter-spacing: 0.5px; }
+        .result-card { background: #1c1c1e; color: white; padding: 30px; border-radius: 25px; text-align: center; display: none; margin-top: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .price { font-size: 48px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -2px; }
+        #res-detail { font-size: 14px; font-weight: 700; opacity: 0.9; margin-top: 10px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.6; }
+        .share-btn { background: var(--isopan-blue); color: white; border: none; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1 id="main-title">Isopan Ibérica</h1>
+    <div class="subtitle" id="status-bar">Tarifas Corporativas</div>
+    
+    <div class="card">
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-es" onclick="changeLang('es')">ES</button>
+            <button class="lang-btn" id="lang-it" onclick="changeLang('it')">IT</button>
+        </div>
+
+        <div class="route-grid">
+            <div>
+                <label id="lbl-origin">Origen</label>
+                <select id="origin" onchange="handleOriginChange()">
+                    <option value="Ibérica">Isopan Ibérica</option>
+                    <option value="Pozzolo">Isopan Pozzolo</option>
+                </select>
+            </div>
+            <div>
+                <label id="lbl-dest">Destino</label>
+                <select id="country" onchange="loadData()"></select>
+            </div>
+        </div>
+
+        <label id="lbl-prov">Provincia / Region</label>
+        <select id="province"></select>
+
+        <div class="truck-selector">
+            <button class="truck-btn active" id="btn-full" onclick="setMode('full')">C. Completo</button>
+            <button class="truck-btn" id="btn-partial" onclick="setMode('partial')">C. Parcial</button>
+        </div>
+
+        <div id="partial-fields" style="display:none;">
+            <label id="lbl-m2">Metros Cuadrados (m2)</label>
+            <input type="number" id="m2" placeholder="0.00" step="any" inputmode="decimal">
+            
+            <label id="lbl-fam">Familia de Panel</label>
+            <select id="family" onchange="updateThickness()"></select>
+            
+            <label id="lbl-thick">Espesor</label>
+            <select id="thickness"></select>
+        </div>
+
+        <button class="calc-btn" id="main-calc-btn" onclick="calculate()">CALCULAR PRECIO</button>
+    </div>
+
+    <div class="result-card" id="result">
+        <div id="lbl-total-net" style="font-size: 12px; font-weight: 800; letter-spacing: 1.5px; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
+        <div class="price" id="res-total">0,00 €</div>
+        <div id="res-detail"></div>
+        <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR PRESUPUESTO</button>
+    </div>
+</div>
+
+<script>
+    const SHEET_ID = '2PACX-1vRLWmNKL74-jgHbM0NIT79W7ShCxYfIKCvkK9bXbBJA0-NcRmBn6hg4RZxLLeaNLyYqnXwTlvLJLx7y';
+    
+    let currentLang = 'es';
+
+    const translations = {
+        es: {
+            subtitle: "Tarifas Corporativas", lblOrigin: "Origen", lblDest: "Destino", lblProv: "Provincia / Region",
+            btnFull: "C. Completo", btnPartial: "C. Parcial", lblM2: "Metros Cuadrados (m2)", lblFam: "Familia de Panel",
+            lblThick: "Espesor", btnCalc: "CALCULAR PRECIO", lblTotalNet: "Total Neto Estimado", btnShare: "COMPARTIR PRESUPUESTO",
+            detailFull: "Tarifa Camión Completo<br>Desde <b>Isopan {origin}</b> a <b>{prov}</b>",
+            detailPartial: "({price}€/m2 + 150€ Apertura camión)<br>Origen: Isopan {origin}",
+            shareTitle: "*ISOPAN - COTIZACIÓN LOGÍSTICA*", shareOrigin: "🛫 *Origen:*", shareDest: "🛬 *Destino:*",
+            shareLoad: "🚛 *Carga:*", sharePanel: "📦 *Panel:*", shareQty: "📏 *Cant:*",
+            loadFull: "Completo", loadPartial: "Parcial", alertM2: "Ingresa m2 válidos"
+        },
+        it: {
+            subtitle: "Tariffe Corporative", lblOrigin: "Origine", lblDest: "Destinazione", lblProv: "Provincia / Regione",
+            btnFull: "Carico Completo", btnPartial: "Carico Parziale", lblM2: "Metri Quadrati (m2)", lblFam: "Famiglia Pannello",
+            lblThick: "Spessore", btnCalc: "CALCOLA PREZZO", lblTotalNet: "Totale Netto Stimato", btnShare: "CONDIVIDI PREVENTIVO",
+            detailFull: "Tariffa Bilico Completo<br>Da <b>Isopan {origin}</b> a <b>{prov}</b>",
+            detailPartial: "({price}€/m2 + 150€ Apertura bilico)<br>Origine: Isopan {origin}",
+            shareTitle: "*ISOPAN - PREVENTIVO LOGISTICA*", shareOrigin: "🛫 *Origine:*", shareDest: "🛬 *Destinazione:*",
+            shareLoad: "🚛 *Carico:*", sharePanel: "📦 *Pannello:*", shareQty: "📏 *Quant:*",
+            loadFull: "Completo", loadPartial: "Parziale", alertM2: "Inserire m2 validi"
+        }
+    };
+
+    const GIDS = {
+        'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' },
+        'Pozzolo': { 'Francia': '1123279553' }
+    };
+
+    const MAP_ES = {
+        isobox: { name: 'ISOBOX/ISOPARETE/FARMAFARM', start: 4, sizes: [30, 35, 40, 50, 60, 80, 100, 120] },
+        isofrozen: { name: 'ISOFROZEN/WALL/WALL PLISSE', start: 13, sizes: [80, 100, 120, 150, 200] },
+        isocop: { name: 'ISOCOP/ISOTAP/ISOTEGO/ISOFIRE ROOF', start: 19, sizes: [30, 40, 50, 60, 80, 100, 120, 150, 200] }
+    };
+
+    const MAP_IT = {
+        parete_pir: { name: 'PARETE PIR-PUR', start: 4, sizes: [25, 30, 35, 40, 50, 60, 80, 100, 120, 150, 180, 200] },
+        copertura_pir: { name: 'COPERTURA PIR-PUR', start: 17, sizes: [15, 30, 40, 50, 60, 80, 100, 120] },
+        parete_mw: { name: 'PARETE MW', start: 26, sizes: [50, 60, 80, 100, 120, 150, 170, 200] },
+        copertura_mw: { name: 'COPERTURA MW', start: 35, sizes: [50, 60, 80, 100, 120, 150, 170, 200] }
+    };
+
+    let currentData = [];
+    let mode = 'full';
+    let lastResult = null;
+
+    function changeLang(lang) {
+        currentLang = lang;
+        document.getElementById('lang-es').classList.toggle('active', lang === 'es');
+        document.getElementById('lang-it').classList.toggle('active', lang === 'it');
+        const t = translations[lang];
+        document.getElementById('status-bar').innerText = t.subtitle;
+        document.getElementById('lbl-origin').innerText = t.lblOrigin;
+        document.getElementById('lbl-dest').innerText = t.lblDest;
+        document.getElementById('lbl-prov').innerText = t.lblProv;
+        document.getElementById('btn-full').innerText = t.btnFull;
+        document.getElementById('btn-partial').innerText = t.btnPartial;
+        document.getElementById('lbl-m2').innerText = t.lblM2;
+        document.getElementById('lbl-fam').innerText = t.lblFam;
+        document.getElementById('lbl-thick').innerText = t.lblThick;
+        document.getElementById('main-calc-btn').innerText = t.btnCalc;
+        document.getElementById('lbl-total-net').innerText = t.lblTotalNet;
+        document.getElementById('lbl-share').innerText = t.btnShare;
+        if (document.getElementById('result').style.display === 'block') calculate();
+    }
+
+    function handleOriginChange() {
+        const origin = document.getElementById('origin').value;
+        const countrySelect = document.getElementById('country');
+        countrySelect.innerHTML = '';
+        Object.keys(GIDS[origin]).forEach(c => {
+            let opt = document.createElement('option');
+            opt.value = c; opt.text = c;
+            countrySelect.appendChild(opt);
+        });
+        const famSelect = document.getElementById('family');
+        famSelect.innerHTML = '';
+        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+        Object.keys(activeMap).forEach(k => {
+            let opt = document.createElement('option');
+            opt.value = k; opt.text = activeMap[k].name;
+            famSelect.appendChild(opt);
+        });
+        loadData();
+    }
+
+    async function loadData() {
+        const origin = document.getElementById('origin').value;
+        const country = document.getElementById('country').value;
+        if(!country) return;
+        const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?output=csv&gid=${GIDS[origin][country]}`;
+        try {
+            const res = await fetch(url);
+            const text = await res.text();
+            const rows = text.split('\n').map(line => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+            currentData = rows.filter(r => r.length > 5 && r[1] && r[1].trim() !== "" && !r[1].includes("PROVINCIA"));
+            const sel = document.getElementById('province');
+            sel.innerHTML = '';
+            currentData.forEach(r => {
+                let pName = r[1].replace(/"/g, '').trim();
+                let opt = document.createElement('option');
+                opt.value = pName; opt.text = pName;
+                sel.appendChild(opt);
+            });
+            updateThickness();
+        } catch (e) { console.error(e); }
+    }
+
+    function updateThickness() {
+        const origin = document.getElementById('origin').value;
+        const family = document.getElementById('family').value;
+        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+        const sel = document.getElementById('thickness');
+        sel.innerHTML = '';
+        if(activeMap[family]) {
+            activeMap[family].sizes.forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s; opt.text = s + ' mm';
+                sel.appendChild(opt);
+            });
+        }
+    }
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById('btn-full').classList.toggle('active', m === 'full');
+        document.getElementById('btn-partial').classList.toggle('active', m === 'partial');
+        document.getElementById('partial-fields').style.display = m === 'partial' ? 'block' : 'none';
+        document.getElementById('result').style.display = 'none';
+    }
+
+    function cleanVal(val) {
+        if (!val) return 0;
+        let s = val.toString().replace(/["€\s]/g, '');
+        if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+        else if (s.includes(',')) s = s.replace(',', '.');
+        return parseFloat(s) || 0;
+    }
+
+    function calculate() {
+        const origin = document.getElementById('origin').value;
+        const provName = document.getElementById('province').value;
+        const row = currentData.find(r => r[1].replace(/"/g, '').trim() === provName);
+        if (!row) return;
+        let total = 0;
+        let detailText = "";
+        const activeMap = origin === 'Ibérica' ? MAP_ES : MAP_IT;
+        const t = translations[currentLang];
+        if (mode === 'full') {
+            total = cleanVal(row[2]);
+            detailText = t.detailFull.replace('{origin}', origin).replace('{prov}', provName);
+            lastResult = { origin, type: 'Full', province: provName, total };
+        } else {
+            const m2 = parseFloat(document.getElementById('m2').value) || 0;
+            if (m2 <= 0) { alert(t.alertM2); return; }
+            const family = document.getElementById('family').value;
+            const thick = document.getElementById('thickness').value;
+            const colIndex = activeMap[family].start + activeMap[family].sizes.indexOf(parseInt(thick));
+            const precioM2 = cleanVal(row[colIndex]);
+            total = 150 + (m2 * precioM2);
+            detailText = t.detailPartial.replace('{price}', precioM2.toFixed(2)).replace('{origin}', origin);
+            lastResult = { origin, type: 'Partial', province: provName, m2, family: activeMap[family].name, thick, total };
+        }
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('res-total').innerText = total.toLocaleString('es-ES', {minimumFractionDigits: 2}) + ' €';
+        document.getElementById('res-detail').innerHTML = detailText;
+    }
+
+    async function shareResult() {
+        if (!lastResult) return;
+        const t = translations[currentLang];
+        let text = `${t.shareTitle}\n───────────────────\n`;
+        text += `${t.shareOrigin} Isopan ${lastResult.origin}\n${t.shareDest} ${lastResult.province}\n`;
+        text += `${t.shareLoad} ${lastResult.type === 'Full' ? t.loadFull : t.loadPartial}\n`;
+        if (lastResult.type === 'Partial') text += `${t.sharePanel} ${lastResult.family}\n${t.shareQty} ${lastResult.thick}mm / ${lastResult.m2}m2\n`;
+        text += `───────────────────\n*TOTAL: ${lastResult.total.toLocaleString('es-ES', {minimumFractionDigits: 2})} EUR*`;
+        if (navigator.share) await navigator.share({ title: 'Presupuesto Isopan', text: text });
+        else { navigator.clipboard.writeText(text); alert("Copiado / Copiato"); }
+    }
+    window.onload = handleOriginChange;
+</script>
+</body>
+</html>
