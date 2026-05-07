@@ -21,7 +21,20 @@
             --text: #1d1d1f; 
             --card-shadow: 0 10px 40px rgba(0,0,0,0.08); 
         }
-        body { font-family: 'Inter', sans-serif; background: var(--apple-bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; }
+        
+        /* Fondo degradado para que el efecto cristal luzca */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f5f5f7 0%, #e2e2e7 100%); 
+            background-attachment: fixed;
+            color: var(--text); 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            -webkit-font-smoothing: antialiased; 
+        }
+
         .app-container { width: 100%; max-width: 400px; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -44,14 +57,45 @@
         .truck-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 800; background: transparent; color: #6e6e73; transition: all 0.2s ease; }
         .truck-btn.active { background: white; color: var(--isopan-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        .calc-btn { width: 100%; padding: 20px; background: var(--isopan-blue); color: white; border: none; border-radius: 18px; font-size: 16px; font-weight: 900; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
-        .calc-btn:disabled { background: #d2d2d7; cursor: not-allowed; transform: none; }
-        .calc-btn:active:not(:disabled) { transform: scale(0.98); }
+        /* --- BOTÓN LIQUID GLASS --- */
+        .calc-btn { 
+            width: 100%; 
+            padding: 20px; 
+            background: rgba(0, 115, 151, 0.8); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px; 
+            font-size: 16px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: all 0.3s; 
+            box-shadow: 0 8px 32px 0 rgba(0, 115, 151, 0.3);
+        }
+        .calc-btn:hover:not(:disabled) { background: rgba(0, 115, 151, 0.9); box-shadow: 0 8px 32px 0 rgba(0, 115, 151, 0.5); }
+        .calc-btn:disabled { background: #d2d2d7; cursor: not-allowed; opacity: 0.6; }
+        .calc-btn:active:not(:disabled) { transform: scale(0.97); }
 
-        .result-card { background: #1c1c1e; color: white; padding: 30px; border-radius: 28px; text-align: center; display: none; margin-top: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); }
+        /* --- TARJETA RESULTADO LIQUID GLASS --- */
+        .result-card { 
+            background: rgba(28, 28, 30, 0.85); 
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            color: white; 
+            padding: 30px; 
+            border-radius: 32px; 
+            text-align: center; 
+            display: none; 
+            margin-top: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); 
+            animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1); 
+        }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .price { font-size: 44px; font-weight: 900; color: #fff; margin: 10px 0; letter-spacing: -1.5px; }
-        #res-detail { font-size: 14px; opacity: 0.8; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; line-height: 1.5; }
+        #res-detail { font-size: 14px; opacity: 0.8; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; line-height: 1.5; }
         
         .share-btn { background: #34c759; color: white; border: none; padding: 18px; border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 25px; transition: background 0.2s; }
     </style>
@@ -105,7 +149,7 @@
         </div>
 
         <div class="result-card" id="result">
-            <div id="lbl-total-net" style="font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase;">Total Neto Estimado</div>
+            <div id="lbl-total-net" style="font-size: 11px; font-weight: 800; color: #aaa; text-transform: uppercase;">Total Neto Estimado</div>
             <div class="price" id="res-total">0,00 €</div>
             <div id="res-detail"></div>
             <button class="share-btn" id="lbl-share" onclick="shareResult()">COMPARTIR</button>
