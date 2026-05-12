@@ -52,8 +52,9 @@
         .app-container { 
             width: 100%; 
             max-width: 420px; 
-            padding-bottom: 80px; 
+            padding-bottom: 40px; 
             z-index: 1;
+            flex: 1;
         }
 
         @media (min-width: 768px) {
@@ -129,7 +130,6 @@
         }
         select:focus, input:focus { background: white; border-color: var(--isopan-blue); }
         
-        /* ESTILO PARA CAMPOS DESACTIVADOS */
         select:disabled, input:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -199,7 +199,15 @@
             width: auto; display: inline-flex; align-items: center; gap: 10px; margin-top: 25px; cursor: pointer; 
         }
 
-        footer { margin-top: 40px; text-align: center; font-size: 11px; color: var(--accent); font-weight: 700; opacity: 0.6; }
+        footer { 
+            margin-top: auto; 
+            padding-bottom: 20px;
+            text-align: center; 
+            font-size: 11px; 
+            color: var(--accent); 
+            font-weight: 700; 
+            opacity: 0.6; 
+        }
     </style>
 </head>
 <body>
@@ -298,8 +306,8 @@
         let currentData = [], mode = 'full', currentLang = 'es', dynamicCapacities = [];
 
         const translations = {
-            es: { subtitle: "TARIFAS CORPORATIVAS", origin: "Origen", country: "Destino", code: "Código", province: "Provincia", full: "Tarifa camión completo", partial: "Tarifa camión parcial", m2: "Cantidad (m²)", panel: "Familia producto", thickness: "Espesor", calc: "CALCULAR PRECIO", share: "Compartir", loading: "CARGANDO...", cap_text: "Cap. media: ", select: "---" },
-            it: { subtitle: "TARIFFE CORPORATE", origin: "Partenza", country: "Destinazione", code: "Codice", province: "Provincia", full: "Tariffa mezzo completo", partial: "Tariffa mezzo parziale", m2: "Quantità (m²)", panel: "Famiglia productos", thickness: "Spessore", calc: "CALCOLA PREZZO", share: "Condividi", loading: "CARICAMENTO...", cap_text: "Cap. media: ", select: "---" }
+            es: { subtitle: "TARIFAS CORPORATIVAS", origin: "Origen", country: "Destino", code: "Código", province: "Provincia", full: "Tarifa camión completo", partial: "Tarifa camión parcial", m2: "Cantidad (m²)", panel: "Familia producto", thickness: "Espesor", calc: "CALCULAR PRECIO", share: "Compartir", loading: "CARGANDO...", cap_text: "Cap. media: ", select: "---", unit_cost: "Coste unitario: " },
+            it: { subtitle: "TARIFFE CORPORATE", origin: "Partenza", country: "Destinazione", code: "Codice", province: "Provincia", full: "Tariffa mezzo completo", partial: "Tariffa mezzo parziale", m2: "Quantità (m²)", panel: "Famiglia productos", thickness: "Spessore", calc: "CALCOLA PREZZO", share: "Condividi", loading: "CARICAMENTO...", cap_text: "Cap. media: ", select: "---", unit_cost: "Costo unitario: " }
         };
 
         const GIDS = { 'Ibérica': { 'España': '565861240', 'Francia': '1175847860', 'Portugal': '1612817192' }, 'Pozzolo': { 'Francia': '1123279553' } };
@@ -345,7 +353,6 @@
             const inputCode = document.getElementById('prov-code-input');
             const selectProv = document.getElementById('province');
             
-            // DESACTIVAR CAMPOS DURANTE CARGA
             bCalc.disabled = true;
             inputCode.disabled = true;
             selectProv.disabled = true;
@@ -370,7 +377,6 @@
                 syncToCode(); updateThickness();
             } catch (e) { console.error(e); } 
             finally { 
-                // REACTIVAR CAMPOS AL FINALIZAR
                 bCalc.disabled = false;
                 inputCode.disabled = false;
                 selectProv.disabled = false;
