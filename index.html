@@ -183,20 +183,54 @@
             box-shadow: none;
         }
 
+        /* TARJETA DE RESULTADO ACTUALIZADA (TRANSPARENTE) */
         .result-card { 
-            background: rgba(10, 37, 64, 0.9); backdrop-filter: blur(15px); color: white; 
-            border-radius: 35px; text-align: center; margin-top: 25px; 
-            opacity: 0; transform: translateY(30px) scale(0.9); pointer-events: none; 
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); height: 0; overflow: hidden;
+            background: rgba(255, 255, 255, 0.5); /* Más transparente */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--text); 
+            border: 1px solid var(--glass-border);
+            border-radius: 35px; 
+            text-align: center; 
+            margin-top: 25px; 
+            opacity: 0; 
+            transform: translateY(30px) scale(0.9); 
+            pointer-events: none; 
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            height: 0; 
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
         }
-        .result-card.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; height: auto; padding: 40px 30px; }
+        .result-card.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+            pointer-events: auto; 
+            height: auto; 
+            padding: 40px 30px; 
+        }
         
-        .price { font-size: 58px; font-weight: 900; margin: 10px 0; }
+        .price { 
+            font-size: 58px; 
+            font-weight: 900; 
+            margin: 10px 0; 
+            color: var(--accent); /* Precio resaltado en azul */
+        }
 
         .share-btn-discreet { 
-            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2); 
-            padding: 12px 24px; border-radius: 14px; font-size: 13px; font-weight: 700; 
-            width: auto; display: inline-flex; align-items: center; gap: 10px; margin-top: 25px; cursor: pointer; 
+            background: var(--accent); 
+            color: white; 
+            border: none;
+            padding: 12px 24px; 
+            border-radius: 14px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            width: auto; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-top: 25px; 
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 115, 151, 0.2);
         }
 
         footer { 
@@ -289,9 +323,9 @@
 
         <div class="result-card" id="result">
             <div id="res-total" class="price">0,00 €</div>
-            <div id="res-detail" style="font-size:14px; opacity:0.9; font-weight:600;"></div>
+            <div id="res-detail" style="font-size:14px; opacity:0.8; font-weight:700; color: #555;"></div>
             <button class="share-btn-discreet" id="btn-share" onclick="shareResult()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
                 <span id="txt-share">Compartir</span>
             </button>
         </div>
