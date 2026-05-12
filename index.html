@@ -183,9 +183,8 @@
             box-shadow: none;
         }
 
-        /* TARJETA DE RESULTADO ACTUALIZADA (TRANSPARENTE) */
         .result-card { 
-            background: rgba(255, 255, 255, 0.5); /* Más transparente */
+            background: rgba(255, 255, 255, 0.5); 
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: var(--text); 
@@ -213,7 +212,7 @@
             font-size: 58px; 
             font-weight: 900; 
             margin: 10px 0; 
-            color: var(--accent); /* Precio resaltado en azul */
+            color: var(--accent); 
         }
 
         .share-btn-discreet { 
@@ -386,13 +385,8 @@
             const bCalc = document.getElementById('main-calc-btn');
             const inputCode = document.getElementById('prov-code-input');
             const selectProv = document.getElementById('province');
-            
-            bCalc.disabled = true;
-            inputCode.disabled = true;
-            selectProv.disabled = true;
-            
+            bCalc.disabled = true; inputCode.disabled = true; selectProv.disabled = true;
             bCalc.innerText = translations[currentLang].loading;
-            
             try {
                 const origin = document.getElementById('origin').value;
                 const country = document.getElementById('country').value;
@@ -401,7 +395,6 @@
                 const rows = text.split('\n').map(l => l.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
                 dynamicCapacities = rows[1] ? rows[1].map(v => cleanVal(v)) : [];
                 currentData = rows.filter(r => r.length > 5 && r[1] && !r[1].includes("PROVINCIA") && !r[1].includes("Capacidad"));
-                
                 const sel = document.getElementById('province'); sel.innerHTML = '';
                 currentData.forEach(r => {
                     let code = r[0].replace(/"/g, '').trim().padStart(2, '0');
@@ -410,12 +403,7 @@
                 });
                 syncToCode(); updateThickness();
             } catch (e) { console.error(e); } 
-            finally { 
-                bCalc.disabled = false;
-                inputCode.disabled = false;
-                selectProv.disabled = false;
-                bCalc.innerText = translations[currentLang].calc; 
-            }
+            finally { bCalc.disabled = false; inputCode.disabled = false; selectProv.disabled = false; bCalc.innerText = translations[currentLang].calc; }
         }
 
         function syncToCode() { const sel = document.getElementById('province'); document.getElementById('prov-code-input').value = sel.options[sel.selectedIndex]?.getAttribute('data-code') || ''; }
@@ -469,17 +457,39 @@
             document.getElementById('result').classList.add('active');
         }
 
-        function clearFields() {
-            hideResult(); document.getElementById('m2').value = '';
-            document.getElementById('province').selectedIndex = 0; syncToCode();
-        }
+        function clearFields() { hideResult(); document.getElementById('m2').value = ''; document.getElementById('province').selectedIndex = 0; syncToCode(); }
 
         async function shareResult() {
-            const total = document.getElementById('res-total').innerText;
+            const origin = document.getElementById('origin').options[document.getElementById('origin').selectedIndex].text;
+            const country = document.getElementById('country').value;
             const province = document.getElementById('province').value;
-            let shareText = `🚚 Isopan Logistic\n\nProvincia: ${province}\nTotal: ${total}`;
-            if (navigator.share) { try { await navigator.share({ title: 'Presupuesto Logística', text: shareText }); } catch (err) {} } 
-            else { navigator.clipboard.writeText(shareText); alert("Copiado"); }
+            const code = document.getElementById('prov-code-input').value;
+            const total = document.getElementById('res-total').innerText;
+            const detail = document.getElementById('res-detail').innerText;
+            
+            let shareText = `🚚 PRESUPUESTO LOGÍSTICA ISOPAN\n\n`;
+            shareText += `Ruta: ${origin} a ${country}\n`;
+            shareText += `Destino: ${code} - ${province}\n`;
+            shareText += `Servicio: ${mode === 'full' ? 'Camión Completo' : 'Carga Parcial'}\n`;
+            
+            if (mode === 'partial') {
+                const family = document.getElementById('family').options[document.getElementById('family').selectedIndex].text;
+                const thickness = document.getElementById('thickness').value;
+                const m2 = document.getElementById('m2').value;
+                shareText += `Producto: ${family}\n`;
+                shareText += `Espesor: ${thickness} mm\n`;
+                shareText += `Cantidad: ${m2} m²\n`;
+                shareText += `${detail}\n`;
+            }
+            
+            shareText += `\nTOTAL ESTIMADO: ${total}\n`;
+
+            if (navigator.share) { 
+                try { await navigator.share({ title: 'Presupuesto Logística Isopan', text: shareText }); } catch (err) {} 
+            } else { 
+                navigator.clipboard.writeText(shareText); 
+                alert(currentLang === 'es' ? "Copiado al portapapeles" : "Copiato negli appunti"); 
+            }
         }
 
         document.getElementById('year').textContent = new Date().getFullYear();
