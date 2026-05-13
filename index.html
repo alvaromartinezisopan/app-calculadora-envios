@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Isopan Logistic</title>
     
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="shortcut icon" href="logo.png">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#e0f2f7">
@@ -120,7 +124,6 @@
         
         select:disabled, input:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* FORMATO CAPACIDAD MEDIA (IGUAL QUE LOS LABEL) */
         #capacity-info { 
             display: block;
             font-size: 15px; 
@@ -152,7 +155,6 @@
 
         footer { margin-top: auto; padding-bottom: 20px; text-align: center; font-size: 11px; color: var(--accent); font-weight: 700; opacity: 0.6; }
 
-        /* ICONOS CAMBIO MODO */
         .sun-icon { display: none; }
         body.dark-mode .moon-icon { display: none; }
         body.dark-mode .sun-icon { display: block; animation: fadeIn 0.5s; }
@@ -252,7 +254,7 @@
         </div>
     </div>
 
-    <footer>© <span id="year"></span> Isopan Ibérica · v 1.4</footer>
+    <footer>© <span id="year"></span> Isopan Ibérica · v 1.0</footer>
 
     <script>
         function applyTheme(isDark) {
