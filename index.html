@@ -456,7 +456,7 @@ const originalCalculate=calculate;calculate=function(){document.querySelectorAll
 {const el=root.querySelector('[data-event-11]');if(el)el.addEventListener("input",function(){removeError(el); hideResult();});}
 {const el=root.querySelector('[data-event-12]');if(el)el.addEventListener("click",function(){calculate()});}
 const sp=get('cmrSplash');let timer;
-function replay(){const az=[...sp.querySelectorAll('.az')];const ds=az.map(el=>getComputedStyle(el).animationDelay);az.forEach(el=>{el.style.animation='none'});void sp.offsetWidth;az.forEach((el,i)=>{el.style.animation='';el.style.animationDelay=ds[i]});sp.style.transition='none';sp.classList.add('active');void sp.offsetWidth;sp.style.transition='';clearTimeout(timer);timer=setTimeout(()=>sp.classList.remove('active'),3000)}
+function replay(){const az=[...sp.querySelectorAll('.az')];const ds=az.map(el=>getComputedStyle(el).animationDelay);az.forEach(el=>{el.style.animation='none'});void sp.offsetWidth;az.forEach((el,i)=>{el.style.animation='';el.style.animationDelay=ds[i]});sp.style.transition='none';sp.classList.add('active');void sp.offsetWidth;sp.style.transition='';clearTimeout(timer);const end=matchMedia('(prefers-reduced-motion: reduce)').matches?0:Math.max(0,...az.map(el=>{const c=getComputedStyle(el);return (parseFloat(c.animationDelay)+parseFloat(c.animationDuration))*1000}));timer=setTimeout(()=>sp.classList.remove('active'),end)}
 get('demo-replay')?.addEventListener('click',replay);replay();return ()=>clearTimeout(timer);
 }
 
